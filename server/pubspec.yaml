@@ -11,8 +11,8 @@ dependencies:
   dart_frog_web_socket: ^0.1.0-dev.2
   flutter_dotenv: ^5.0.2
   mongo_dart: ^0.8.2
-
   mongo_dart_query: ^3.0.0
+
   shared:
     path: ./packages/shared
 
