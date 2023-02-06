@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dart_frog/dart_frog.dart';
 import 'package:server/db/room/room_operations_repo.dart';
 import 'package:server/responses/api_expection.dart';
@@ -19,12 +18,13 @@ Future<Response> onRequest(RequestContext context) async {
   if (!key) {
     return ApiException.failedDependency(details: 'RoomId not found');
   }
-  final check =
-      await context.read<RoomOperations>().checkRoom(data['roomId']! as String);
+  final roomId = data['roomId'] as String;
+
+  final check = await context.read<RoomOperations>().checkRoom(room: roomId);
 
   if (check == null) {
     return ApiException.badRequest(details: 'No rooms with this id found');
   }
 
-  return Response.json(body: RoomDto.fromModel(check).toJson());
+  return Response.json(body: CheckRoomDto.fromModel(check).toJson());
 }

@@ -18,22 +18,32 @@ class RoomOperaionRepoImpl implements RoomOperations {
 
   Future<List<String>> _getRoomId() async => _collection
       .find()
-      .asyncMap((event) => RoomDto.fromJson(event).roomId)
+      .asyncMap(
+        (event) => RoomDto.fromEntity(MongoRoomEntity.fromJson(event)).roomId,
+      )
       .toList();
 
   @override
-  Future<RoomModel?> checkRoom(String room) async {
+  Future<CheckRoomModel?> checkRoom({required String room}) async {
     final result = await _collection.findOne(where.eq('roomId', room));
-    if (result == null) return null;
-    return RoomDto.fromJson(result).toModel();
+    if (result == null) return CheckRoomModel(state: RoomState.undefined);
+    final model =
+        RoomDto.fromEntity(MongoRoomEntity.fromJson(result)).toModel();
+    if (model.count == model.maxAttendes) {
+      return CheckRoomModel(state: RoomState.full, room: model);
+    }
+    return CheckRoomModel(state: RoomState.joinable, room: model);
   }
 
   @override
-  Future<RoomModel> createRoom() async {
+  Future<RoomModel> createRoom({required int max}) async {
     final roomId = createRoomId(await _getRoomId());
 
-    final result = await _collection.insertOne({'roomId': roomId});
+    final result = await _collection.insertOne(
+      CreateRoomDto(roomId: roomId, maxAttendes: max).toJson(),
+    );
 
-    return RoomDto.fromJson(result.document!).toModel();
+    return RoomDto.fromEntity(MongoRoomEntity.fromJson(result.document!))
+        .toModel();
   }
 }

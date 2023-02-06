@@ -1,15 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:shared/src/models/chat_model.dart';
 
-import '../convertors/objectid_covertor.dart';
+import '../../shared.dart';
 
 part 'chat_dto.g.dart';
 
-@JsonSerializable(converters: [ObjectIdConvertor()])
+@JsonSerializable()
 class ChatDto {
   @JsonKey(name: '_id')
-  final ObjectId id;
+  final String id;
   final String room;
   final String username;
   final String text;
@@ -27,17 +26,32 @@ class ChatDto {
       _$ChatDtoFromJson(json);
 
   factory ChatDto.fromModel(ChatModel model) => ChatDto(
-        id: ObjectId.fromHexString(model.id!),
+        id: (model.id!),
         username: model.username,
         text: model.text,
         time: model.time,
         room: model.room,
       );
 
+  factory ChatDto.fromEntity(MongoChatEntity entity) => ChatDto(
+      id: entity.id.$oid,
+      room: entity.room,
+      username: entity.username,
+      text: entity.text,
+      time: entity.time);
+
   Map<String, dynamic> toJson() => _$ChatDtoToJson(this);
 
   ChatModel toModel() => ChatModel(
-        id: id.$oid,
+        id: id,
+        room: room,
+        username: username,
+        text: text,
+        time: time,
+      );
+
+  MongoChatEntity toEntity() => MongoChatEntity(
+        id: ObjectId.fromHexString(id),
         room: room,
         username: username,
         text: text,
