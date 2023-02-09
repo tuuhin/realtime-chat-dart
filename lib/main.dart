@@ -1,5 +1,5 @@
 import 'package:logging/logging.dart';
-import 'package:reatime_chat/app.dart';
+import './utils/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,14 +22,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Realtime Chat App',
       theme: ThemeData(
         useMaterial3: true,
         primarySwatch: Colors.grey,
+        primaryColor: Colors.grey,
       ),
-      home: const App(),
+      routeInformationParser: router.routeInformationParser,
+      routeInformationProvider: router.routeInformationProvider,
+      routerDelegate: router.routerDelegate,
     );
   }
 }

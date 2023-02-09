@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:reatime_chat/main.dart';
 import 'package:shared/shared.dart';
 
 class RoomApi {
@@ -9,12 +10,12 @@ class RoomApi {
   final _dio = Dio(BaseOptions(baseUrl: _endpoint));
 
   Future<RoomDto> createRoom() async {
-    Response resp = await _dio.get('create_room');
+    Response resp = await _dio.get('/create_room');
     return RoomDto.fromJson(resp.data);
   }
 
-  Future<RoomDto> checkRoom() async {
-    Response resp = await _dio.get('check_room');
-    return RoomDto.fromJson(resp.data);
+  Future<CheckRoomDto> checkRoom(String room) async {
+    Response resp = await _dio.post('/check_room', data: {'roomId': room});
+    return CheckRoomDto.fromJson(resp.data);
   }
 }

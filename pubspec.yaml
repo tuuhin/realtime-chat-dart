@@ -44,6 +44,7 @@ dependencies:
     path: server/packages/shared
 
   flutter_dotenv: ^5.0.2
+  web_socket_channel: ^2.3.0
 
 dev_dependencies:
   flutter_test:

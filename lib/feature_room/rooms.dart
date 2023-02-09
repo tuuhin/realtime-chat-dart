@@ -1,38 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class Rooms extends StatefulWidget {
+class Rooms extends StatelessWidget {
   const Rooms({Key? key}) : super(key: key);
-
-  @override
-  State<Rooms> createState() => _RoomsState();
-}
-
-class _RoomsState extends State<Rooms> {
-  void _createRoom() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Create Room"),
-        actions: [
-          TextButton(
-            onPressed: Navigator.of(context).pop,
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Create'),
-          )
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,13 +26,13 @@ class _RoomsState extends State<Rooms> {
             ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(fixedSize: Size(size.width, 50)),
-                onPressed: _createRoom,
+                onPressed: () {},
                 child: Text("Create Room")),
             const Divider(),
             TextButton(
                 style: TextButton.styleFrom(fixedSize: Size(size.width, 50)),
-                onPressed: () {},
-                child: Text("Join a room"))
+                onPressed: () => context.push('/join-room'),
+                child: const Text("Join a room"))
           ],
         ),
       ),

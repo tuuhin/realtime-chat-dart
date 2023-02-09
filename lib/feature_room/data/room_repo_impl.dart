@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reatime_chat/main.dart';
 import 'package:shared/shared.dart';
 
 import '../repository/room_repo.dart';
@@ -10,12 +11,12 @@ class RoomRepoImpl implements RoomRepo {
   RoomRepoImpl(this._api);
 
   @override
-  Stream<Resource<RoomModel?>> checkRoom(String room) async* {
+  Stream<Resource<CheckRoomModel?>> checkRoom(String room) async* {
     yield Resource.loading(message: "CHECKING YOUR ROOM");
+    await Future.delayed(const Duration(seconds: 2));
     try {
-      RoomDto dto = await _api.createRoom();
-      yield Resource.success(
-          data: dto.toModel(), message: "Your room id has benn created");
+      CheckRoomDto dto = await _api.checkRoom(room);
+      yield Resource.success(data: dto.toModel());
     } catch (e, stk) {
       debugPrintStack(stackTrace: stk);
       yield Resource.failed(message: e.toString(), err: e);
