@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:reatime_chat/main.dart';
 import 'package:shared/shared.dart';
 
 class RoomApi {
@@ -9,8 +8,8 @@ class RoomApi {
 
   final _dio = Dio(BaseOptions(baseUrl: _endpoint));
 
-  Future<RoomDto> createRoom() async {
-    Response resp = await _dio.get('/create_room');
+  Future<RoomDto> createRoom(int max) async {
+    Response resp = await _dio.post('/create_room', data: {"max": max});
     return RoomDto.fromJson(resp.data);
   }
 

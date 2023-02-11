@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reatime_chat/main.dart';
 
 import 'package:shared/shared.dart';
 
@@ -16,14 +17,17 @@ class CheckRoomStateNotifier extends StateNotifier<Resource<CheckRoomModel?>> {
 
   void checkRoom({required String room}) {
     // Clears the able to join the room
-    _notifier.dontAllowJoin();
+
     _repo.checkRoom(room).listen(
-      (event) {
-        state = event;
-        event.whenOrNull(
-          // Allowing to join the chat
-          success: (data, message) => _notifier.allowJoin(),
+      (event) => state = event,
+      onDone: () {
+        state.maybeWhen(
+          success: (data, __) => data?.state == RoomState.joinable
+              ? _notifier.allowJoin()
+              : _notifier.reset(),
+          orElse: () => _notifier.reset(),
         );
+        logger.fine(_notifier.allowed);
       },
     );
   }

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:reatime_chat/main.dart';
 
 class RoomJoinNotifier extends ChangeNotifier {
   bool _isJoinAllowed = false;
@@ -9,11 +8,10 @@ class RoomJoinNotifier extends ChangeNotifier {
   void allowJoin() {
     if (_isJoinAllowed) return;
     _isJoinAllowed = true;
-    logger.fine("abcjabca");
     notifyListeners();
   }
 
-  void dontAllowJoin() {
+  void reset() {
     if (!_isJoinAllowed) return;
     _isJoinAllowed = false;
     notifyListeners();

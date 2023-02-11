@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../context/room_context.dart';
 import '../widgets/widgets.dart';
 
 class JoinRoomRoute extends ConsumerStatefulWidget {
@@ -15,18 +16,13 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
 
   String? _roomId;
 
-  bool _isChecking = false;
-
   void _checkRoom() {
     if (!_formKey.currentState!.validate()) return;
+
     showDialog(
-      barrierDismissible: _isChecking,
+      barrierDismissible: false,
       context: context,
-      builder: (context) => JoinRoomDialog(
-        roomId: _roomId!,
-        isChecking: _isChecking,
-        onChecking: (value) => setState(() => _isChecking = value),
-      ),
+      builder: (context) => JoinRoomDialog(roomId: _roomId!),
     );
   }
 

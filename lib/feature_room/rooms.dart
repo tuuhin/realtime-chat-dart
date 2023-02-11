@@ -26,8 +26,8 @@ class Rooms extends StatelessWidget {
             ElevatedButton(
                 style:
                     ElevatedButton.styleFrom(fixedSize: Size(size.width, 50)),
-                onPressed: () {},
-                child: Text("Create Room")),
+                onPressed: () =>context.push('/create-room'),
+                child: const Text("Create Room")),
             const Divider(),
             TextButton(
                 style: TextButton.styleFrom(fixedSize: Size(size.width, 50)),
