@@ -1,15 +1,25 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reatime_chat/feature_room/context/create_room_state_provider.dart';
-import 'package:reatime_chat/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:shared/shared.dart';
 
+import '../../main.dart';
+import '../data/local_storage.dart';
 import '../data/room_api.dart';
 import '../data/room_repo_impl.dart';
+import '../repository/local_data_repo.dart';
 import '../repository/room_repo.dart';
-import 'check_room_state_provider.dart';
-import 'room_join_notifer.dart';
+import './check_room_state_provider.dart';
+import './create_room_state_provider.dart';
+import './room_join_notifer.dart';
 
 final _roomApi = Provider<RoomApi>((ref) => RoomApi());
+
+final _prefernses = Provider<Future<SharedPreferences>>(
+    (ref) => SharedPreferences.getInstance());
+
+final localDataProvider =
+    Provider<LocalDataRepo>((ref) => LocalStorage(ref.read(_prefernses)));
 
 final _roomprovider = Provider<RoomRepo>(
   (ref) => RoomRepoImpl(ref.read<RoomApi>(_roomApi)),
