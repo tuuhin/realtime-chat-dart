@@ -37,4 +37,7 @@ class CheckRoomDto {
   factory CheckRoomDto.fromModel(CheckRoomModel model) => CheckRoomDto(
       state: model.state,
       room: model.room != null ? RoomDto.fromModel(model.room!) : null);
+
+  CheckRoomModel toModel() =>
+      CheckRoomModel(state: state, room: room?.toModel());
 }
