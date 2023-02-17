@@ -1,24 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:reatime_chat/feature_room/ui/widgets/create_room_dialog.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CreateRoomRoute extends StatefulWidget {
+import '../../context/room_context.dart';
+import '../widgets/create_room_dialog.dart';
+
+class CreateRoomRoute extends ConsumerStatefulWidget {
   const CreateRoomRoute({Key? key}) : super(key: key);
 
   @override
-  State<CreateRoomRoute> createState() => _CreateRoomRouteState();
+  ConsumerState<CreateRoomRoute> createState() => _CreateRoomRouteState();
 }
 
-class _CreateRoomRouteState extends State<CreateRoomRoute> {
+class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
   late TextEditingController _maxAttendesCount;
   late TextEditingController _usernameField;
 
   final GlobalKey<FormState> _fromKey = GlobalKey<FormState>();
+
+  Future<void> _postFrameCallBack(Duration _) async {
+    final prev = await ref.read(localDataProvider).getUsername();
+    if (prev == null) return;
+    _usernameField.text = prev;
+  }
 
   @override
   void initState() {
     super.initState();
     _maxAttendesCount = TextEditingController();
     _usernameField = TextEditingController();
+
+    WidgetsBinding.instance.addPostFrameCallback(_postFrameCallBack);
   }
 
   @override
@@ -30,12 +41,11 @@ class _CreateRoomRouteState extends State<CreateRoomRoute> {
 
   void _createRoom() {
     if (!_fromKey.currentState!.validate()) return;
+    ref.read(localDataProvider).setUsername(_usernameField.text);
     showDialog(
       context: context,
-      builder: (context) => CreateRoomDialog(
-        username: _usernameField.text,
-        maxCount: int.parse(_maxAttendesCount.text),
-      ),
+      builder: (context) =>
+          CreateRoomDialog(maxCount: int.parse(_maxAttendesCount.text)),
     );
   }
 
@@ -85,7 +95,7 @@ class _CreateRoomRouteState extends State<CreateRoomRoute> {
                 validator: (value) => value != null &&
                         value.isNotEmpty &&
                         int.tryParse(value) == null
-                    ? "ENter some integer "
+                    ? "Enter some integer "
                     : null,
                 controller: _maxAttendesCount,
                 keyboardType: TextInputType.number,
@@ -95,7 +105,7 @@ class _CreateRoomRouteState extends State<CreateRoomRoute> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(width: 2, color: Colors.deepPurple),
                   ),
-                  helperText: "Room Attendes count",
+                  helperText: "Attendes Count",
                   hintText: "4",
                   prefixIcon: Icon(Icons.numbers),
                 ),
@@ -106,7 +116,9 @@ class _CreateRoomRouteState extends State<CreateRoomRoute> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: TextButton(
-            onPressed: _createRoom, child: const Text("Create room")),
+          onPressed: _createRoom,
+          child: const Text("Create room"),
+        ),
       ),
     );
   }

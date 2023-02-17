@@ -56,7 +56,6 @@ class _RoomIdFillerState extends State<RoomIdFiller> {
   }
 
   String? _validate(String? value) {
-    if (widget.formKey == null) return null;
     if (value != null && value.isEmpty) return "";
     return null;
   }

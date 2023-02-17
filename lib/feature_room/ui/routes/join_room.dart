@@ -20,7 +20,10 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
     if (!_formKey.currentState!.validate()) return;
 
     showDialog(
-      barrierDismissible: false,
+      barrierDismissible: ref
+          .watch(checkRoomStateProvider(_roomId!).notifier)
+          .joinRoomNotifier
+          .allowed,
       context: context,
       builder: (context) => JoinRoomDialog(roomId: _roomId!),
     );
@@ -28,9 +31,9 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
         centerTitle: true,
         title: const Text("Join Room"),
       ),
@@ -59,23 +62,32 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
               onSubmit: (fi) => _roomId = fi,
               onChange: (str) =>
                   _roomId = _roomId == null ? str : _roomId! + str,
-              decoration: const InputDecoration(
-                  filled: true,
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 2, color: Colors.deepPurple),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 2, color: Colors.pink))),
+              decoration: InputDecoration(
+                filled: true,
+                border: const OutlineInputBorder(borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      width: 2, color: Theme.of(context).colorScheme.primary),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      width: 2, color: Theme.of(context).colorScheme.error),
+                ),
+              ),
             ),
-            const Spacer(),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(fixedSize: Size(size.width, 50)),
-              onPressed: _checkRoom,
-              child: const Text("Check cerdentials"),
-            )
+
+            // const Spacer(),
+            // ElevatedButton(
+            //   style: ElevatedButton.styleFrom(fixedSize: Size(size.width, 50)),
+            //   onPressed: _checkRoom,
+            //   child: const Text("Check cerdentials"),
+            // )
           ],
         ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: TextButton(
+            onPressed: _checkRoom, child: const Text('Check Credentials')),
       ),
     );
   }

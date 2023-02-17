@@ -7,9 +7,7 @@ import 'create_room_viewer.dart';
 
 class CreateRoomDialog extends ConsumerStatefulWidget {
   final int maxCount;
-  final String username;
   const CreateRoomDialog({
-    required this.username,
     super.key,
     required this.maxCount,
   });

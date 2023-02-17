@@ -28,11 +28,26 @@ class CreateRoomViewer extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    data.roomId,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                  // const SizedBox.shrink(),
+                  Row(
+                    children: [
+                      const SizedBox(width: 10),
+                      Text(
+                        "RoomCode: ",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        data.roomId,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
                   ),
                   IconButton(
                     tooltip: "COPY THE ROOM ID TO CLIPBOARD",
@@ -42,21 +57,17 @@ class CreateRoomViewer extends StatelessWidget {
                 ],
               ),
               const Divider(),
-              Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Room details",
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  )),
-              Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    "Max Attendes count ${data.maxAttendes}",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
-                  )),
+              Text(
+                "Room details",
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+              Text(
+                "Max Attendes count ${data.maxAttendes}",
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
             ],
           ),
         )
