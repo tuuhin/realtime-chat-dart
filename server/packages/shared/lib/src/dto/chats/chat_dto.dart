@@ -1,21 +1,21 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
-import '../../shared.dart';
+import '../../../shared.dart';
 
 part 'chat_dto.g.dart';
 
 @JsonSerializable()
 class ChatDto {
   @JsonKey(name: '_id')
-  final String id;
+  final String? id;
   final String room;
   final String username;
   final String text;
   final DateTime time;
 
   ChatDto({
-    required this.id,
+    this.id,
     required this.room,
     required this.username,
     required this.text,
@@ -26,7 +26,7 @@ class ChatDto {
       _$ChatDtoFromJson(json);
 
   factory ChatDto.fromModel(ChatModel model) => ChatDto(
-        id: (model.id!),
+        id: model.id,
         username: model.username,
         text: model.text,
         time: model.time,
@@ -34,11 +34,12 @@ class ChatDto {
       );
 
   factory ChatDto.fromEntity(MongoChatEntity entity) => ChatDto(
-      id: entity.id.$oid,
-      room: entity.room,
-      username: entity.username,
-      text: entity.text,
-      time: entity.time);
+        id: entity.id.$oid,
+        room: entity.room,
+        username: entity.username,
+        text: entity.text,
+        time: entity.time,
+      );
 
   Map<String, dynamic> toJson() => _$ChatDtoToJson(this);
 
@@ -50,11 +51,14 @@ class ChatDto {
         time: time,
       );
 
-  MongoChatEntity toEntity() => MongoChatEntity(
-        id: ObjectId.fromHexString(id),
-        room: room,
-        username: username,
-        text: text,
-        time: time,
-      );
+  MongoChatEntity toEntity() {
+    assert(id != null, "THE ID OF AN MONOGO ENTITY OBJECT CANNOT BE NULL");
+    return MongoChatEntity(
+      id: ObjectId.fromHexString(id!),
+      room: room,
+      username: username,
+      text: text,
+      time: time,
+    );
+  }
 }

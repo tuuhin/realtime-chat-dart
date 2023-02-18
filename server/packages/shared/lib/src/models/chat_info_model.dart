@@ -16,12 +16,13 @@ enum ChatMessageDataType {
 
 @freezed
 class ChatMessageInfoModel with _$ChatMessageInfoModel {
-  @Assert("type==ChatMessageDataType.message && model==null",
-      "Message type should alawys have an model")
-  @Assert("type!=ChatMessageDataType.message && extra==null",
-      "A non message side should have extra")
+  // @Assert("type==ChatMessageDataType.message && model==null",
+  //     "Message type should alawys have an model")
+  // @Assert("type!=ChatMessageDataType.message && extra==null",
+  //     "A non message side should have extra")
   factory ChatMessageInfoModel({
     required ChatMessageDataType type,
+    required ChatOwner owner,
     ChatModel? model,
     String? extra,
   }) = _ChatMessageInfoModel;

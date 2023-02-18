@@ -7,26 +7,33 @@ import 'package:shared/shared.dart';
 /// convert them into string
 class WsBaseMessages {
   /// The user joined message
-  static String joined(String username) => ChatInfoDto.fromModel(
+  static String joined(String username) => jsonEncode(ChatInfoDto.fromModel(
         ChatMessageInfoModel(
+          owner: ChatOwner.server,
           type: ChatMessageDataType.joined,
           extra: '$username joined the room',
         ),
-      ).toJson().toString();
+      ).toJson());
 
   ///User dissconneted message
   static String dissconnected(String username, {String? reason}) =>
-      ChatInfoDto.fromModel(
+      jsonEncode(ChatInfoDto.fromModel(
         ChatMessageInfoModel(
+          owner: ChatOwner.server,
           type: ChatMessageDataType.disconnected,
           extra: '$username disconnected ${reason ?? ''}',
         ),
-      ).toJson().toString();
+      ).toJson());
 
   /// User sends a message to the other sockets
-  static String message(ChatModel chat) => ChatInfoDto.fromModel(
-        ChatMessageInfoModel(type: ChatMessageDataType.message, model: chat),
-      ).toJson().toString();
+  static String message(ChatModel chat, {required ChatOwner owner}) =>
+      jsonEncode(ChatInfoDto.fromModel(
+        ChatMessageInfoModel(
+          type: ChatMessageDataType.message,
+          model: chat,
+          owner: owner,
+        ),
+      ).toJson());
 
   /// Parses the incomming message
   static ChatMessageInfoModel parseMessage(String data) {
