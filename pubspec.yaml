@@ -46,6 +46,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   web_socket_channel: ^2.3.0
   url_strategy: ^0.2.0
+  dynamic_color: ^1.6.2
 
 dev_dependencies:
   flutter_test:

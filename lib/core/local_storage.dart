@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../repository/local_data_repo.dart';
+import 'local_data_repo.dart';
 
 class LocalStorage implements LocalDataRepo {
   final Future<SharedPreferences> _pref;

@@ -2,9 +2,11 @@ import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:reatime_chat/theme/palette.dart';
 import 'package:url_strategy/url_strategy.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 
-import './utils/router.dart';
+import 'router.dart';
 
 final logger = Logger("Realtime-Chat-App-Logger");
 void main() {
@@ -23,16 +25,15 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Realtime Chat App',
-        theme: ThemeData(
-          useMaterial3: true,
-          primarySwatch: Colors.grey,
-          primaryColor: Colors.grey,
+  Widget build(BuildContext context) => DynamicColorBuilder(
+        builder: (ColorScheme? light, ColorScheme? dark) => MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Chat App',
+          darkTheme: darkTheme.copyWith(colorScheme: dark),
+          theme: lightTheme.copyWith(colorScheme: light),
+          routeInformationParser: router.routeInformationParser,
+          routeInformationProvider: router.routeInformationProvider,
+          routerDelegate: router.routerDelegate,
         ),
-        routeInformationParser: router.routeInformationParser,
-        routeInformationProvider: router.routeInformationProvider,
-        routerDelegate: router.routerDelegate,
       );
 }

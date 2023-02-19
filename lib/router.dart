@@ -1,10 +1,10 @@
 import 'package:go_router/go_router.dart';
 import 'package:shared/shared.dart';
 
-import '../feature_chat/chats.dart';
-import '../feature_room/rooms.dart';
+import 'feature_chat/chats.dart';
+import 'feature_room/rooms.dart';
 
-import '../feature_room/ui/routes/room_routes.dart';
+import 'feature_room/ui/routes/room_routes.dart';
 
 final router = GoRouter(
   initialLocation: '/',
@@ -23,6 +23,6 @@ final router = GoRouter(
     GoRoute(
       path: '/chats',
       builder: (context, state) => Chats(room: state.extra as RoomModel),
-    )
+    ),
   ],
 );
