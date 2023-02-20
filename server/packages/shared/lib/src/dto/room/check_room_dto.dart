@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:shared/shared.dart';
 
-import '../../utils/room_state.dart';
-
 part 'check_room_dto.g.dart';
 
 @JsonSerializable()
@@ -21,8 +19,9 @@ class CheckRoomDto {
   Map<String, dynamic> toJson() => _$CheckRoomDtoToJson(this);
 
   factory CheckRoomDto.fromModel(CheckRoomModel model) => CheckRoomDto(
-      state: model.state,
-      room: model.room != null ? RoomDto.fromModel(model.room!) : null);
+        state: model.state,
+        room: model.room != null ? RoomDto.fromModel(model.room!) : null,
+      );
 
   CheckRoomModel toModel() =>
       CheckRoomModel(state: state, room: room?.toModel());

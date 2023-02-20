@@ -10,7 +10,12 @@ class ChatInfoDto {
   final String? extra;
   final ChatOwner owner;
 
-  ChatInfoDto({required this.type, this.chat, this.extra, required this.owner});
+  ChatInfoDto({
+    required this.type,
+    this.chat,
+    this.extra,
+    required this.owner,
+  });
 
   factory ChatInfoDto.fromJson(Map<String, dynamic> json) =>
       _$ChatInfoDtoFromJson(json);
@@ -25,5 +30,9 @@ class ChatInfoDto {
   Map<String, dynamic> toJson() => _$ChatInfoDtoToJson(this);
 
   ChatMessageInfoModel toModel() => ChatMessageInfoModel(
-      type: type, model: chat?.toModel(), extra: extra, owner: owner);
+        type: type,
+        model: chat?.toModel(),
+        extra: extra,
+        owner: owner,
+      );
 }

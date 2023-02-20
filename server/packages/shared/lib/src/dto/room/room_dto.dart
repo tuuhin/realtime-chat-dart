@@ -40,10 +40,11 @@ class RoomDto {
       );
 
   MongoRoomEntity toEntity() => MongoRoomEntity(
-      id: ObjectId.fromHexString(id),
-      roomId: roomId,
-      maxAttendes: maxAttendes,
-      count: count);
+        id: ObjectId.fromHexString(id),
+        roomId: roomId,
+        maxAttendes: maxAttendes,
+        count: count,
+      );
 
   Map<String, dynamic> toJson() => _$RoomDtoToJson(this);
 

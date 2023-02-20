@@ -9,9 +9,13 @@ part 'chat_dto.g.dart';
 class ChatDto {
   @JsonKey(name: '_id')
   final String? id;
+  @JsonKey(name: "room")
   final String room;
+  @JsonKey(name: "username")
   final String username;
+  @JsonKey(name: "text")
   final String text;
+  @JsonKey(name: "time")
   final DateTime time;
 
   ChatDto({

@@ -4,6 +4,6 @@ extension ReadableDates on DateTime {
   String get simpleFormat {
     final String timeHour = _twoDigits(hour);
     final String timeMinutes = _twoDigits(minute);
-    return '$timeHour : $timeMinutes ${hour < 12 ? 'am' : 'pm'}';
+    return '$timeHour:$timeMinutes ${hour < 12 ? 'am' : 'pm'}';
   }
 }

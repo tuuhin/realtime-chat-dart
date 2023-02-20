@@ -8,11 +8,11 @@ part 'mongo_room_entity.g.dart';
 ///These classes will be same as the dto object
 @JsonSerializable(converters: [ObjectIdConvertor()])
 class MongoRoomEntity extends BaseEntity {
+  
   @JsonKey(name: "roomId")
   final String roomId;
   @JsonKey(name: "max")
   final int maxAttendes;
-
   @JsonKey(name: "count")
   final int count;
 
