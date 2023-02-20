@@ -1,7 +1,8 @@
 import 'dart:io';
+
 import 'package:dart_frog/dart_frog.dart';
-import 'package:server/db/room/room_operations_repo.dart';
 import 'package:server/responses/api_expection.dart';
+import 'package:server/respository/repository.dart';
 import 'package:shared/shared.dart';
 
 Future<Response> onRequest(RequestContext context) async {
@@ -11,20 +12,15 @@ Future<Response> onRequest(RequestContext context) async {
 
   final data = await context.request.json();
   if (data is! Map<String, dynamic>) {
-    return ApiException.failedDependency(
-        details: 'Content type should be json found ${data.runtimeType}');
+    return ApiException.failedDependency(details: 'Invalid format');
   }
   final key = data.containsKey('roomId');
   if (!key) {
-    return ApiException.failedDependency(details: 'RoomId not found');
+    return ApiException.failedDependency(details: 'Room id is not provided');
   }
   final roomId = data['roomId'] as String;
 
   final check = await context.read<RoomOperations>().checkRoom(room: roomId);
-
-  if (check == null) {
-    return ApiException.badRequest(details: 'No rooms with this id found');
-  }
 
   return Response.json(body: CheckRoomDto.fromModel(check).toJson());
 }

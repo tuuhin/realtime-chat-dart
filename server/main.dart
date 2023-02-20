@@ -1,5 +1,5 @@
-import 'dart:io';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
 import 'package:logging/logging.dart';
@@ -20,7 +20,16 @@ Future<HttpServer> run(Handler handler, InternetAddress ip, int port) async {
   await _database.init();
 
   logger.onRecord.listen(
-    (record) => log('${record.level.name}: ${record.time}: ${record.message}'),
+    (record) => log(
+      '${record.level.name}: ${record.time}: ${record.message}',
+      level: record.level.value,
+      name: record.loggerName,
+      sequenceNumber: record.sequenceNumber,
+      time: record.time,
+      zone: record.zone,
+      error: record.error,
+      stackTrace: record.stackTrace,
+    ),
   );
 
   /// The main app runs from here

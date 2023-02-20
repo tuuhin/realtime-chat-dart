@@ -1,8 +1,9 @@
 import 'package:dart_frog/dart_frog.dart';
-import 'package:server/db/chat_operation_repo.dart';
 
-Response onRequest(RequestContext context) {
-  final repo = context.read<ChatOperationRepo>();
+final _info = {
+  'title': 'Realtime chat app (Server)',
+  'description':
+      'This is the server for realtime chat app made with dart_frog and flutter'
+};
 
-  return Response(body: 'Welcome to Dart Frog!');
-}
+Response onRequest(RequestContext context) => Response.json(body: _info);

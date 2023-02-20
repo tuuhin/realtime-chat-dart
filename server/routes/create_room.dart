@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dart_frog/dart_frog.dart';
-import 'package:server/db/room/room_operations_repo.dart';
 import 'package:server/responses/api_expection.dart';
+import 'package:server/respository/repository.dart';
 import 'package:shared/shared.dart';
 
 Future<Response> onRequest(RequestContext context) async {
@@ -17,9 +17,8 @@ Future<Response> onRequest(RequestContext context) async {
     return ApiException.badRequest(details: 'Max attendes are not provided');
   }
 
-  final maxAttendes = body['max'] as int;
-  final resp =
-      await context.read<RoomOperations>().createRoom(max: maxAttendes);
+  final responseModel =
+      await context.read<RoomOperations>().createRoom(max: body['max'] as int);
 
-  return Response.json(body: RoomDto.fromModel(resp).toJson());
+  return Response.json(body: RoomDto.fromModel(responseModel).toJson());
 }

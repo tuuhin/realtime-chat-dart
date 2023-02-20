@@ -18,6 +18,7 @@ class MongoDataBase {
   ///This inilizes the database
   Future<void> init() async {
     // If the database is already initilized then no need to re-initilize it
+
     if (_isInit) return;
     _dataBase = Db(mongoURL);
     _isInit = true;
@@ -28,4 +29,7 @@ class MongoDataBase {
       print("OPENDED DATABASE");
     }
   }
+
+  /// Closes the opened database
+  void close() => _isInit ? _dataBase.close() : null;
 }

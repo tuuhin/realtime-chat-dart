@@ -1,17 +1,15 @@
 import 'package:dart_frog/dart_frog.dart';
 import 'package:dart_frog_web_socket/dart_frog_web_socket.dart';
-import 'package:server/db/chat_operation_repo.dart';
-import 'package:server/db/room/room_operations_repo.dart';
-import 'package:server/responses/api_expection.dart';
-import 'package:shared/shared.dart';
+import 'package:server/respository/repository.dart';
 
+import 'package:shared/shared.dart';
 import '../../main.dart';
 
 /// This hold the list of [WebSocketChannel]
-/// Though this is just a in-memory mapping [Map] hoding th [String] room with
+/// Though this is just a `in-memory mapping` [Map] hoding th [String] room with
 /// the [List] of [WebSocketChannel]s
 /// The similar thing can be applied with pubsub feature of the redis server
-/// in a long running and traffic based application
+/// for a long running and traffic based application
 final Map<String, List<WebSocketChannel>> _channelsRoom = {};
 
 Future<Response> onRequest(RequestContext context, String room) async {
@@ -20,27 +18,30 @@ Future<Response> onRequest(RequestContext context, String room) async {
   final roomRepo = context.read<RoomOperations>();
   final roomValidation = await roomRepo.checkRoom(room: room);
 
-  if (roomValidation?.state != null &&
-      roomValidation!.state != RoomState.joinable) {
-    return ApiException.failedDependency(
-      details: 'Cannot join the room,either room do not exits or room is full',
-    );
-  }
   final query = context.request.uri.queryParameters;
-  if (!query.containsKey('username')) {
-    return ApiException.failedDependency(details: 'Username not found');
-  }
-  final username = query['username'];
-
-  if (username == null) {
-    return ApiException.failedDependency(
-      details: 'Username not provided',
-    );
-  }
   final chatRepo = context.read<ChatOperationRepo>();
 
   final handler = webSocketHandler(
     (channel, protocol) async {
+      // Room State validation
+      if (roomValidation.state != RoomState.joinable) {
+        await channel.sink.close(
+          WsCloseCodes.mandatoryExtensionNotFound.closeCode,
+          'Room is not joinable',
+        );
+        return;
+      }
+      // QueryParms validation
+      if (!query.containsKey('username')) {
+        await channel.sink.close(
+          WsCloseCodes.mandatoryExtensionNotFound.closeCode,
+          'username not found',
+        );
+        return;
+      }
+      final username = query['username']!;
+
+      // Updating the `_channelsRoom` as per the join sequence
       if (_channelsRoom.containsKey(room)) {
         _channelsRoom.update(room, (value) => value..add(channel));
       } else {
@@ -52,45 +53,86 @@ Future<Response> onRequest(RequestContext context, String room) async {
           newCount: _channelsRoom[room]!.length,
         );
       }
+      //send all the previous chats stored in mongodb database
+      await channel.sink.addStream(
+        chatRepo.streamChats(room: room).asyncMap(
+              (chat) => WsBaseMessages.message(
+                chat,
+                owner: chat.username == username
+                    ? ChatOwner.self
+                    : ChatOwner.other,
+              ),
+            ),
+      );
+
       //welcome message to the stream
-      channel.sink.add(WsBaseMessages.joined(username));
+      _channelsRoom[room]?.forEach(
+        (others) => others.sink.add(WsBaseMessages.joined(username)),
+      );
 
       channel.stream.listen(
-        (event) {
+        (event) async {
           // Get all the associated sockets [WebSocketChannel] present
           // with the same room then channelize through all the sockets
           // not brodcasting it (sending to all sockets except the channel )
           final sockets = _channelsRoom[room];
-          print(event);
-          final message = WsBaseMessages.parseMessage(event as String);
-          chatRepo.insertChat(chat: message.model!);
 
-          sockets?.forEach(
-            (socket) => socket != channel
-                ? socket.sink.add(WsBaseMessages.message(message.model!))
-                : null,
-          );
+          try {
+            final message = WsBaseMessages.parseMessage(event as String);
+            final savedModel = await chatRepo.insertChat(chat: message.model!);
+
+            // print(savedModel);
+
+            sockets?.forEach(
+              (socket) => socket.sink.add(
+                WsBaseMessages.message(
+                  savedModel,
+                  owner: channel == socket ? ChatOwner.self : ChatOwner.other,
+                ),
+              ),
+            );
+          } on FormatException {
+            logger.info('format exception');
+            await channel.sink.close(
+              WsCloseCodes.closeUnsupportedPayLoad.closeCode,
+              WsCloseCodes.closeUnsupportedPayLoad.name,
+            );
+          } catch (e) {
+            logger.shout(e);
+            await channel.sink.close(
+              WsCloseCodes.closeProtocolError.closeCode,
+              WsCloseCodes.closeProtocolError.name,
+            );
+          }
         },
         onDone: () async {
+          logger.fine('closed the stream');
           _channelsRoom.update(room, (value) => value..remove(channel));
 
-          _channelsRoom[room]?.forEach((others) {
-            others.sink.add(
-              WsBaseMessages.dissconnected(username,
-                  reason: channel.closeReason),
-            );
-          });
+          _channelsRoom[room]?.forEach(
+            (others) => others.sink.add(
+              WsBaseMessages.dissconnected(
+                username,
+                reason: channel.closeReason,
+              ),
+            ),
+          );
           await roomRepo.updateRoom(
             room: room,
             newCount: _channelsRoom[room]?.length ?? 0,
           );
         },
         onError: (_) async {
-          print('some error occured !!');
+          logger.shout('some error occured !!');
           _channelsRoom.update(room, (value) => value..remove(channel));
-          _channelsRoom[room]?.forEach((others) => others.sink.add(
-              WsBaseMessages.dissconnected(username,
-                  reason: channel.closeReason)));
+          _channelsRoom[room]?.forEach(
+            (others) => others.sink.add(
+              WsBaseMessages.dissconnected(
+                username,
+                reason: channel.closeReason,
+              ),
+            ),
+          );
           await roomRepo.updateRoom(
             room: room,
             newCount: _channelsRoom[room]?.length ?? 0,

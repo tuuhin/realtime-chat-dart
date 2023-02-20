@@ -9,7 +9,7 @@ environment:
 dependencies:
   dart_frog: ^0.3.0
   dart_frog_web_socket: ^0.1.0-dev.2
-  flutter_dotenv: ^5.0.2
+  dotenv: ^4.1.0
   mongo_dart: ^0.8.2
   mongo_dart_query: ^3.0.0
 
