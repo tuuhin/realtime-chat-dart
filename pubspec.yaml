@@ -58,6 +58,30 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.11.0
+  flutter_native_splash: ^2.2.16
+
+flutter_native_splash:
+  color: "#C6E2FF"
+  image: assets/images/chats.png
+
+  android_12:
+    color: "#C6E2FF"
+    image: assets/images/chats.png
+
+  android: true
+  ios: false
+  web: true
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: false
+  image_path: "assets/images/chats.png"
+  background_color: "#C6E2FF"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/chats.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
