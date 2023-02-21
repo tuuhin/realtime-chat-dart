@@ -12,10 +12,6 @@ class CreateRoomViewer extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Text(
-        //   "Room created successfully",
-        //   style: Theme.of(context).textTheme.labelLarge,
-        // ),
         Container(
           width: double.maxFinite,
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -25,38 +21,30 @@ class CreateRoomViewer extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // const SizedBox.shrink(),
-                  Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      Text(
-                        "RoomCode: ",
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // const SizedBox.shrink(),
+                    Text(
+                      data.roomId,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w600,
-                            decoration: TextDecoration.underline),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        data.roomId,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    tooltip: "COPY THE ROOM ID TO CLIPBOARD",
-                    onPressed: onCopy,
-                    icon: const Icon(Icons.copy),
-                  )
-                ],
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    IconButton(
+                      tooltip: "COPY THE ROOM ID TO CLIPBOARD",
+                      onPressed: onCopy,
+                      icon: const Icon(Icons.copy),
+                    )
+                  ],
+                ),
               ),
-              const Divider(),
+              Divider(
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
               Text(
                 "Room details",
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -64,9 +52,11 @@ class CreateRoomViewer extends StatelessWidget {
                     ),
               ),
               Text(
-                "Max Attendes count ${data.maxAttendes}",
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+                "Total Attendes :${data.maxAttendes}",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ],
           ),

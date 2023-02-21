@@ -25,11 +25,32 @@ class RoomModelViewer extends StatelessWidget {
           typeToString,
           style: Theme.of(context).textTheme.labelLarge,
         ),
+        if (roomModel.state == RoomState.undefined) ...[
+          const SizedBox(height: 2),
+          Text(
+            'Room dont exists create a new one ',
+            style: Theme.of(context).textTheme.bodySmall,
+          )
+        ],
         const SizedBox(height: 10),
-        if (roomModel.room != null) ...[
-          Text("Joined: ${roomModel.room!.count}"),
-          Text("Maximum: ${roomModel.room!.maxAttendes}")
-        ]
+        if (roomModel.room != null)
+          Container(
+            width: double.maxFinite,
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("Joined: ${roomModel.room!.count}"),
+                  Text("Maximum: ${roomModel.room!.maxAttendes}")
+                ],
+              ),
+            ),
+          )
       ],
     );
   }

@@ -26,31 +26,36 @@ class _JoinRoomDialogState extends ConsumerState<JoinRoomDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text.rich(
-        TextSpan(text: "Code :", children: [
-          TextSpan(
+        TextSpan(
+          text: "Code :",
+          children: [
+            TextSpan(
               text: widget.roomId,
-              style: const TextStyle(color: Colors.deepPurple))
-        ]),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            )
+          ],
+        ),
         textAlign: TextAlign.center,
         style: const TextStyle(fontWeight: FontWeight.w500, letterSpacing: 1.2),
       ),
       content: ref.watch(checkRoomStateProvider(widget.roomId)).when(
-          success: (data, message) {
-            if (roomModel == null && data?.state == RoomState.joinable) {
-              roomModel = data?.room;
-            }
-            return RoomModelViewer(roomModel: data!);
-          },
-          failed: (message, err, data) => Text(message),
-          loading: (__, _) => Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text("Checking", textAlign: TextAlign.center),
-                  SizedBox(width: 10),
-                  CircularProgressIndicator()
-                ],
-              )),
+            success: (data, message) {
+              if (roomModel == null && data?.state == RoomState.joinable) {
+                roomModel = data?.room;
+              }
+              return RoomModelViewer(roomModel: data!);
+            },
+            failed: (message, err, data) => Text(message),
+            loading: (__, _) => Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("Checking", textAlign: TextAlign.center),
+                SizedBox(width: 10),
+                CircularProgressIndicator()
+              ],
+            ),
+          ),
       actions: [
         Builder(builder: (context) {
           final roomProvider = ref

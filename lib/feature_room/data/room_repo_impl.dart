@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:shared/shared.dart';
+import 'package:flutter/material.dart';
 
 import '../repository/room_repo.dart';
 import './room_api.dart';
@@ -10,9 +10,8 @@ class RoomRepoImpl implements RoomRepo {
   RoomRepoImpl(this._api);
 
   @override
-  Stream<Resource<CheckRoomModel?>> checkRoom(String room) async* {
+  Stream<Resource<CheckRoomModel>> checkRoom(String room) async* {
     yield Resource.loading(message: "CHECKING YOUR ROOM");
-    await Future.delayed(const Duration(seconds: 2));
     try {
       CheckRoomDto dto = await _api.checkRoom(room);
       yield Resource.success(data: dto.toModel());

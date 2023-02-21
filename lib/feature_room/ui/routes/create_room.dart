@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reatime_chat/core/local_data_repo.dart';
 
-import '../../context/room_context.dart';
+import '../../../core/local_store_context.dart';
 import '../widgets/create_room_dialog.dart';
 
 class CreateRoomRoute extends ConsumerStatefulWidget {
@@ -14,6 +15,7 @@ class CreateRoomRoute extends ConsumerStatefulWidget {
 class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
   late TextEditingController _maxAttendesCount;
   late TextEditingController _usernameField;
+  late LocalDataRepo _repo;
 
   final GlobalKey<FormState> _fromKey = GlobalKey<FormState>();
 
@@ -28,6 +30,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
     super.initState();
     _maxAttendesCount = TextEditingController();
     _usernameField = TextEditingController();
+    _repo = ref.read(localDataProvider);
 
     WidgetsBinding.instance.addPostFrameCallback(_postFrameCallBack);
   }
@@ -39,10 +42,13 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
     super.dispose();
   }
 
-  void _createRoom() {
+  void _createRoom() async {
     if (!_fromKey.currentState!.validate()) return;
-    ref.read(localDataProvider).setUsername(_usernameField.text);
-    showDialog(
+    if (await _repo.getUsername() != _usernameField.text) {
+      _repo.setUsername(_usernameField.text);
+    }
+    if (!mounted) return;
+    await showDialog(
       context: context,
       builder: (context) =>
           CreateRoomDialog(maxCount: int.parse(_maxAttendesCount.text)),
@@ -79,35 +85,41 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
                     : null,
                 controller: _usernameField,
                 keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                  fillColor: Theme.of(context).colorScheme.secondaryContainer,
                   filled: true,
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  border: const OutlineInputBorder(borderSide: BorderSide.none),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 2, color: Colors.deepPurple),
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                    ),
                   ),
                   helperText: "Username used for the chat",
                   hintText: "Flutter",
-                  prefixIcon: Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person),
                 ),
               ),
               const SizedBox(height: 8),
               TextFormField(
-                validator: (value) => value != null &&
-                        value.isNotEmpty &&
-                        int.tryParse(value) == null
-                    ? "Enter some integer "
-                    : null,
+                validator: (value) => value != null && value.isEmpty
+                    ? "Enter attendes count"
+                    : value != null && int.tryParse(value) == null
+                        ? "Non integer values cannot be an attendes count"
+                        : null,
                 controller: _maxAttendesCount,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
+                  fillColor: Theme.of(context).colorScheme.secondaryContainer,
                   filled: true,
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  border: const OutlineInputBorder(borderSide: BorderSide.none),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(width: 2, color: Colors.deepPurple),
+                    borderSide: BorderSide(
+                        width: 2, color: Theme.of(context).colorScheme.primary),
                   ),
                   helperText: "Attendes Count",
                   hintText: "4",
-                  prefixIcon: Icon(Icons.numbers),
+                  prefixIcon: const Icon(Icons.numbers),
                 ),
               ),
             ],

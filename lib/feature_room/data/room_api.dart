@@ -14,6 +14,7 @@ class RoomApi {
       connectTimeout: const Duration(seconds: 5),
       receiveTimeout: const Duration(seconds: 5),
       responseType: ResponseType.json,
+      contentType: 'application/json',
     ),
   );
 

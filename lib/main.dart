@@ -1,12 +1,12 @@
 import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:reatime_chat/theme/palette.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'router.dart';
+import './router.dart';
+import './theme/palette.dart';
 
 final logger = Logger("Realtime-Chat-App-Logger");
 void main() {

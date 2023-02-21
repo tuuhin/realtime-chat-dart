@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reatime_chat/core/ui/set_username_button.dart';
 
-import '../../context/room_context.dart';
 import '../widgets/widgets.dart';
 
 class JoinRoomRoute extends ConsumerStatefulWidget {
@@ -20,10 +20,6 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
     if (!_formKey.currentState!.validate()) return;
 
     showDialog(
-      barrierDismissible: ref
-          .watch(checkRoomStateProvider(_roomId!).notifier)
-          .joinRoomNotifier
-          .allowed,
       context: context,
       builder: (context) => JoinRoomDialog(roomId: _roomId!),
     );
@@ -33,9 +29,9 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
         centerTitle: true,
         title: const Text("Join Room"),
+        actions: const [SetUsernameButton()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -64,6 +60,7 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
                   _roomId = _roomId == null ? str : _roomId! + str,
               decoration: InputDecoration(
                 filled: true,
+                fillColor: Theme.of(context).colorScheme.secondaryContainer,
                 border: const OutlineInputBorder(borderSide: BorderSide.none),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -75,13 +72,6 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
                 ),
               ),
             ),
-
-            // const Spacer(),
-            // ElevatedButton(
-            //   style: ElevatedButton.styleFrom(fixedSize: Size(size.width, 50)),
-            //   onPressed: _checkRoom,
-            //   child: const Text("Check cerdentials"),
-            // )
           ],
         ),
       ),
