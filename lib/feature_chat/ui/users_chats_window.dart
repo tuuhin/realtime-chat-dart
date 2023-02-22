@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reatime_chat/main.dart';
 
 import 'package:shared/shared.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -17,6 +19,12 @@ class UserChatsWindow extends ConsumerWidget {
     required this.channel,
     required this.scroll,
   });
+
+  void _schedularCallBack(Duration _) {
+    logger.fine("scrolling to bottom");
+    scroll.animateTo(scroll.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,10 +52,19 @@ class UserChatsWindow extends ConsumerWidget {
           ),
           StreamBuilder(
             stream: ref.read(chatRepoProvider(channel)).recieveChat(),
-            builder: (context, snapshot) =>
-                snapshot.hasData && snapshot.data != null
-                    ? UserChats(chats: snapshot.data!)
-                    : const SliverToBoxAdapter(child: Text('waiting')),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data != null) {
+                SchedulerBinding.instance
+                    .addPostFrameCallback(_schedularCallBack);
+
+                return UserChats(chats: snapshot.data!);
+              }
+              return const SliverFillRemaining(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
           )
         ],
       ),

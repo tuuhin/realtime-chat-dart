@@ -10,7 +10,10 @@ class SetUsernameButton extends StatelessWidget {
     return IconButton(
       onPressed: () => showDialog(
           context: context, builder: (context) => const SetUsernameDialog()),
-      icon: const Icon(Icons.person_2_outlined),
+      icon: Icon(
+        Icons.person_2_rounded,
+        color: Theme.of(context).colorScheme.secondary,
+      ),
     );
   }
 }

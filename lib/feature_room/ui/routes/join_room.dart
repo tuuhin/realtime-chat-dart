@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reatime_chat/core/ui/set_username_button.dart';
+import 'package:reatime_chat/core/ui/ui.dart';
 
 import '../widgets/widgets.dart';
 
@@ -29,6 +29,7 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
         centerTitle: true,
         title: const Text("Join Room"),
         actions: const [SetUsernameButton()],
@@ -60,7 +61,7 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
                   _roomId = _roomId == null ? str : _roomId! + str,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Theme.of(context).colorScheme.secondaryContainer,
+                fillColor: Theme.of(context).colorScheme.onInverseSurface,
                 border: const OutlineInputBorder(borderSide: BorderSide.none),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -76,8 +77,12 @@ class _JoinRoomRouteState extends ConsumerState<JoinRoomRoute> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).colorScheme.onInverseSurface,
+        surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
         child: TextButton(
-            onPressed: _checkRoom, child: const Text('Check Credentials')),
+          onPressed: _checkRoom,
+          child: const Text('Check Credentials'),
+        ),
       ),
     );
   }

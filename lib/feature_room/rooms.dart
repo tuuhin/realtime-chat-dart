@@ -15,7 +15,10 @@ class _RoomsState extends State<Rooms> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
         title: const Text('Realtime Chat App'),
         centerTitle: true,
         actions: const [SetUsernameButton()],
@@ -47,7 +50,7 @@ class _RoomsState extends State<Rooms> {
                 color: Theme.of(context).colorScheme.surface,
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             Text(
               'Create or join a room to chat ',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(

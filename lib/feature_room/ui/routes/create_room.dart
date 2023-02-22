@@ -58,13 +58,18 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Create Room"), centerTitle: true),
+      appBar: AppBar(
+        title: const Text("Create Room"),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _fromKey,
           child: Column(
             children: [
+              const SizedBox(height: 10),
               Text(
                 "Create a roomID",
                 style: Theme.of(context)
@@ -86,7 +91,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
                 controller: _usernameField,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
-                  fillColor: Theme.of(context).colorScheme.secondaryContainer,
+                  fillColor: Theme.of(context).colorScheme.onInverseSurface,
                   filled: true,
                   border: const OutlineInputBorder(borderSide: BorderSide.none),
                   focusedBorder: OutlineInputBorder(
@@ -110,7 +115,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
                 controller: _maxAttendesCount,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  fillColor: Theme.of(context).colorScheme.secondaryContainer,
+                  fillColor: Theme.of(context).colorScheme.onInverseSurface,
                   filled: true,
                   border: const OutlineInputBorder(borderSide: BorderSide.none),
                   focusedBorder: OutlineInputBorder(
@@ -128,9 +133,7 @@ class _CreateRoomRouteState extends ConsumerState<CreateRoomRoute> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: TextButton(
-          onPressed: _createRoom,
-          child: const Text("Create room"),
-        ),
+            onPressed: _createRoom, child: const Text("Create room")),
       ),
     );
   }

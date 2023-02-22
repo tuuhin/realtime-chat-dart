@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' show pi;
-
 import 'package:shared/shared.dart';
 
 class ChatBubble extends CustomPainter {

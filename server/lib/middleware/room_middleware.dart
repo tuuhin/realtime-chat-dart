@@ -5,5 +5,6 @@ import 'package:server/respository/repository.dart';
 ///Provies room fucntions
 Middleware roomMiddleWare() {
   return provider<RoomOperations>(
-      (context) => RoomOperationRepoImpl(database.db));
+    (context) => RoomOperationRepoImpl(database.db),
+  );
 }

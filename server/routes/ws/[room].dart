@@ -138,6 +138,7 @@ Future<Response> onRequest(RequestContext context, String room) async {
             newCount: _channelsRoom[room]?.length ?? 0,
           );
         },
+        cancelOnError: true,
       );
     },
   );

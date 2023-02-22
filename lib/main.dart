@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:flutter/material.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -29,8 +30,20 @@ class MyApp extends StatelessWidget {
         builder: (ColorScheme? light, ColorScheme? dark) => MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'Chat App',
-          darkTheme: darkTheme.copyWith(colorScheme: dark),
-          theme: lightTheme.copyWith(colorScheme: light),
+          darkTheme: dark != null
+              ? ThemeData(
+                  useMaterial3: true,
+                  typography:
+                      Typography.material2021(platform: defaultTargetPlatform),
+                  colorScheme: dark)
+              : darkTheme,
+          theme: light != null
+              ? ThemeData(
+                  useMaterial3: true,
+                  typography:
+                      Typography.material2021(platform: defaultTargetPlatform),
+                  colorScheme: light)
+              : lightTheme,
           routeInformationParser: router.routeInformationParser,
           routeInformationProvider: router.routeInformationProvider,
           routerDelegate: router.routerDelegate,

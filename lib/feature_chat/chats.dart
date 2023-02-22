@@ -19,9 +19,9 @@ class _ChatsState extends ConsumerState<Chats> {
   late ScrollController _controller;
 
   void _onSend(String value, WebSocketChannel channel) {
-    if (_controller.offset < _controller.position.maxScrollExtent * .8) {
+    if (_controller.offset < _controller.position.maxScrollExtent * .5) {
       _controller.animateTo(_controller.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 800), curve: Curves.easeIn);
+          duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
     }
     ref.read(chatRepoProvider(channel)).sendMessage(value, widget.room);
   }
@@ -41,6 +41,7 @@ class _ChatsState extends ConsumerState<Chats> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: ref.watch(channelHandler(widget.room)).when(
             success: (channel, _) => UserChatsWindow(
               channel: channel,
