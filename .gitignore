@@ -41,6 +41,7 @@ app.*.map.json
 # gernerater files
 **/*.freezed.dart
 **/*.g.dart
+/test/
 
 # Android Studio will place build artifacts here
 /android/app/debug

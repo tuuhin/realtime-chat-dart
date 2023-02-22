@@ -1,39 +1,19 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+# :house_with_garden: Shared
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+This package is created for the shared code which the server and the client uses,as both being made with `dart`.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+## :deciduous_tree: Features
 
-## Features
+The package contains the `utils`,`entity`, `dto` and `model` objects which are used for data transaction over the app and along the server and client.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+### 🏃 Generate Code
 
-## Getting started
+This package has to gerrate a lot of code as these are mostly json serlizers and `freezed` annotated models.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
-
-```dart
-const like = 'sample';
+```bash
+    dart pub get
+    dart run build_runner build 
 ```
 
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+This will generate the required code
